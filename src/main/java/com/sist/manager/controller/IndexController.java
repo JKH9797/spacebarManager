@@ -33,7 +33,7 @@ import com.sist.manager.service.AdminService;
 
 /**
  * <pre>
- * 패키지명   : com.icia.manager.controller
+ * 패키지명   : com.icia.manager.controller ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ2시29분
  * 파일명     : IndexController.java
  * 작성일     : 2021. 7. 30.
  * 작성자     : daekk
