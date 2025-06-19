@@ -45,6 +45,8 @@ public class IndexController
 {
 	private static Logger logger = LoggerFactory.getLogger(IndexController.class);
 
+	// 막내 테스트
+	
 	// 쿠키명
 	@Value("#{env['auth.cookie.name']}")
 	private String AUTH_COOKIE_NAME;
