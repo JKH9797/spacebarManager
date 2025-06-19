@@ -56,7 +56,7 @@ public class IndexController
 	
 	/**
 	 * <pre>
-	 * 메소드명   : index
+	 * 메소드명   : index 남경식텥ㅌㅌㅌㅌㅌㅌㅌㅌㅌㅌ스트
 	 * 작성일     : 2021. 7. 30.
 	 * 작성자     : daekk
 	 * 설명       : 인덱스
