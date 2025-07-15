@@ -40,7 +40,7 @@ public class UserController {
 	
 	
 	
-	private static final int LIST_COUNT = 3;
+	private static final int LIST_COUNT = 10;
 	private static final int PAGE_COUNT = 3;
 	
 	
@@ -57,6 +57,8 @@ public class UserController {
 		String userStat = HttpUtil.get(request, "userStat", "");
 		String searchType = HttpUtil.get(request, "searchType", "");
 		String searchValue = HttpUtil.get(request, "searchValue", "");
+		String userType = HttpUtil.get(request, "userType", "");
+		String approvStat = HttpUtil.get(request, "approvStat", "");
 		
 		String gubun = "";
 		
@@ -68,6 +70,24 @@ public class UserController {
 		else
 		{
 			userStat = "";
+		}
+		
+		if(!StringUtil.isEmpty(userType))
+		{
+			user.setUserType(userType);
+		}
+		else
+		{
+			userType = "";
+		}
+		
+		if(!StringUtil.isEmpty(approvStat))
+		{
+			user.setApprovStat(approvStat);
+		}
+		else
+		{
+			approvStat = "";
 		}
 		
 		if(!StringUtil.isEmpty(searchType) && !StringUtil.isEmpty(searchValue))
@@ -82,6 +102,16 @@ public class UserController {
 				user.setUserName(searchValue);
 				gubun = "Y";
 			}
+			else if(StringUtil.equals(searchType, "3"))
+			{
+				user.setPhone(searchValue);
+				gubun = "Y";
+			}
+			else if(StringUtil.equals(searchType, "4"))
+			{
+				user.setNickname(searchValue);
+				gubun = "Y";
+			}
 			else
 			{
 				searchType = "";
@@ -93,8 +123,9 @@ public class UserController {
 		{
 			searchType = "";
 			searchValue = "";
-			// gubun = "";
 		}
+		
+		boolean pendingList = "H".equals(userType) && "N".equals(approvStat);
 		
 		totalCount = userService.userListCount(user);
 		
@@ -115,6 +146,18 @@ public class UserController {
 		model.addAttribute("curPage", curPage);
 		model.addAttribute("userStat", userStat);
 		model.addAttribute("gubun", gubun);
+
+		
+		 if (pendingList) {
+		        // 한 번만 조회하고 나면, 폼 필터는 초기화 상태로 보여 줌
+		        model.addAttribute("userType",   "");
+		        model.addAttribute("approvStat", "");
+		    } else {
+		        // 일반 검색 시엔 원래 값을 계속 유지
+		        model.addAttribute("userType",   userType);
+		        model.addAttribute("approvStat", approvStat);
+		    }
+
 		
 		return "/user/list";
 	}
@@ -150,6 +193,9 @@ public class UserController {
 		String userName = HttpUtil.get(request, "userName");
 		String email = HttpUtil.get(request, "email");
 		String userStat = HttpUtil.get(request, "userStat");
+		String phone = HttpUtil.get(request, "phone");
+		String nickname = HttpUtil.get(request, "nickname");
+		String approvStat = HttpUtil.get(request, "approvStat");
 		
 		if(!StringUtil.isEmpty(userId) && !StringUtil.isEmpty(userPwd) && 
 				!StringUtil.isEmpty(email) && !StringUtil.isEmpty(userStat))
@@ -162,6 +208,9 @@ public class UserController {
 				user.setUserName(userName);
 				user.setEmail(email);
 				user.setUserStat(userStat);
+				user.setApprovStat(approvStat);
+				user.setPhone(phone);
+				user.setNickname(nickname);
 				
 				if(userService.userUpdate(user) >0)
 				{
@@ -194,10 +243,7 @@ public class UserController {
 	@RequestMapping(value="/loginOut", method=RequestMethod.GET)
 	public String loginOut(HttpServletRequest request, HttpServletResponse response)
 	{
-		if(CookieUtil.getCookie(request, AUTH_COOKIE_NAME) != null)
-		{
-			CookieUtil.deleteCookie(request, response, "/", AUTH_COOKIE_NAME);
-		}
+		request.getSession().invalidate();
 		
 
 		return "redirect:/"; // 쿠키 삭제하기 위해

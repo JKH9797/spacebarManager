@@ -96,7 +96,9 @@ function fn_userUpdate()
 		userPwd:$("#userPwd").val(),
 		userName:$("#userName").val(),
 		email:$("#email").val(),
-		userStat:$("#userStat").val()
+		userStat:$("#userStat").val(),
+		phone:$("#phone").val(),
+		nickname:$("#nickname").val(),
 	};
 	
 	$.ajax({
@@ -187,6 +189,16 @@ function fn_idPwdCheck(val)
                   </td>
                </tr>
                <tr>
+                  <th scope="row">전화번호</th>
+                  <td>
+                     <input type="text" id="phone" name="phone" value="${user.phone}" style="font-size:1rem;;" maxlength="50" placeholder="전화번호" />
+                  </td>
+                  <th scope="row">닉네임</th>
+                  <td>
+                     <input type="text" id="nickname" name="nickname" value="${user.nickname}" style="font-size:1rem;;" maxlength="50" placeholder="닉네임" />
+                  </td>
+               </tr>
+               <tr>
                   <th scope="row">상태</th>
                   <td>
                      <select id="userStat" name="userStat" style="font-size: 1rem; width: 7rem; height: 2rem;">
@@ -197,6 +209,7 @@ function fn_idPwdCheck(val)
                   <th scope="row">등록일</th>
                   <td>${user.joinDt}</td>
                </tr>
+               
             </tbody>
          </table>
       </form>

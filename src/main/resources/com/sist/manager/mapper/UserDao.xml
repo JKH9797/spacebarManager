@@ -32,7 +32,8 @@
 				        PHONE,
 				        NICKNAME,
 				        USER_TYPE,
-				        APPROV_STAT
+				        APPROV_STAT,
+				        MILE
 				FROM ( SELECT  ROWNUM AS RNUM,
 				                USER_ID,
 				                USER_PWD,
@@ -43,7 +44,8 @@
 				                PHONE,
 				                NICKNAME,
 				                USER_TYPE,
-				                APPROV_STAT
+				                APPROV_STAT,
+				                MILE
 				        FROM (           SELECT  USER_ID,
 				                                NVL(USER_PWD, '') USER_PWD,
 				                                NVL(USER_NAME, '') USER_NAME,
@@ -53,11 +55,14 @@
 				                                NVL(PHONE, '') PHONE,
 				                                NVL(NICKNAME, '') NICKNAME,
 				                                NVL(USER_TYPE, '') USER_TYPE,
-				                                NVL(APPROV_STAT, '') APPROV_STAT
-
+				                                NVL(APPROV_STAT, '') APPROV_STAT,
+												NVL(MILE, '') MILE
+												
 				                          FROM  SB_USER
 				                         WHERE  1=1 
-				                         
+				                 <if test='userType != null and userType != ""'>        
+				                           AND  USER_TYPE LIKE '%' || #{userType} || '%'
+				                 </if>         
 				                 <if test='userStat != null and userStat != ""'>        
 				                           AND  USER_STAT LIKE '%' || #{userStat} || '%'
 				                 </if> 
@@ -67,6 +72,15 @@
 				                 <if test='userName != null and userName !=""'>
 				                           AND  USER_NAME LIKE '%' || #{userName} || '%'
 				                 </if>
+				                 <if test='phone != null and phone !=""'>
+				                           AND  PHONE LIKE '%' || #{phone} || '%'
+				                 </if>
+				                 <if test='nickname != null and nickname !=""'>
+				                           AND  NICKNAME LIKE '%' || #{nickname} || '%'
+				                 </if>
+				                 <if test='approvStat != null and approvStat == "N"'>        
+				                           AND  APPROV_STAT = #{approvStat}
+				                 </if> 
 				                         ORDER BY JOIN_DT DESC))
 				                         
 				WHERE RNUM <![CDATA[>=]]> #{startRow}
@@ -77,6 +91,9 @@
 	SELECT COUNT(USER_ID) CNT
 	  FROM  SB_USER
 	 WHERE  1=1 
+	 <if test='userType != null and userType != ""'>        
+		AND  USER_TYPE LIKE '%' || #{userType} || '%'
+	 </if>
 	 <if test='userStat != null and userStat != ""'>
 	   AND  USER_STAT LIKE '%' || #{userStat} || '%'
 	 </if>
@@ -86,6 +103,16 @@
 	 <if test='userName != null and userName != ""'>
 	   AND  USER_NAME LIKE '%' || #{userName} || '%'
 	 </if>
+	 <if test='phone != null and phone !=""'>
+       AND  PHONE LIKE '%' || #{phone} || '%'
+     </if>
+     <if test='nickname != null and nickname !=""'>
+       AND  NICKNAME LIKE '%' || #{nickname} || '%'
+     </if>
+     <if test='approvStat != null and approvStat == "N"'>        
+       AND  APPROV_STAT = #{approvStat}
+     </if> 
+	 
 	</select>
 	
 	<select id="userSelect" parameterType="string" resultMap="userResultMap">
@@ -95,7 +122,11 @@
 				    NVL(USER_NAME, '') USER_NAME,
 				    NVL(EMAIL, '') EMAIL,
 				    NVL(USER_STAT, 'N') USER_STAT,
-				    NVL(TO_CHAR(JOIN_DT, 'YYYY.MM.DD HH24:MI:SS'), '') JOIN_DT
+				    NVL(TO_CHAR(JOIN_DT, 'YYYY.MM.DD HH24:MI:SS'), '') JOIN_DT,
+				    NVL(PHONE, '') PHONE,
+                    NVL(NICKNAME, '') NICKNAME,
+                    NVL(APPROV_STAT, '') APPROV_STAT
+
 				FROM SB_USER
 				WHERE USER_ID = #{value}
 	</select>
@@ -105,7 +136,11 @@
 				   SET USER_PWD = #{userPwd},
 				       USER_NAME = #{userName},
 				       EMAIL = #{email},
-				       USER_STAT = #{userStat}
+				       USER_STAT = #{userStat},
+				       PHONE = #{phone},
+				       NICKNAME = #{nickname},
+				       APPROV_STAT = #{approvStat}
+				       
 				WHERE USER_ID = #{userId}
 	</update>
 	

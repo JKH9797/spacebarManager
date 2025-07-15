@@ -48,8 +48,8 @@ public class IndexController
 	// 막내 테스트
 	
 	// 쿠키명
-	@Value("#{env['auth.cookie.name']}")
-	private String AUTH_COOKIE_NAME;
+	@Value("#{env['auth.session.name']}")
+	private String AUTH_SESSION_NAME;
 	
 	@Autowired
 	private AdminService adminService;
@@ -68,7 +68,9 @@ public class IndexController
 	@RequestMapping(value="/index")
 	public String index(Model model, HttpServletRequest request, HttpServletResponse response)
 	{
-		if(CookieUtil.getCookie(request, AUTH_COOKIE_NAME) != null)
+		String sessionUserId = (String)request.getSession().getAttribute(AUTH_SESSION_NAME);
+		
+		if(sessionUserId != null)
 		{
 			return "redirect:/user/list";
 		}
@@ -88,7 +90,7 @@ public class IndexController
 		
 		String adminId = HttpUtil.get(request, "adminId");
 		String adminPwd = HttpUtil.get(request, "adminPwd");
-		
+
 		if(!StringUtil.isEmpty(adminId) && !StringUtil.isEmpty(adminPwd))
 		{
 			Admin admin = adminService.adminSelect(adminId);
@@ -99,7 +101,7 @@ public class IndexController
 				{
 					if(StringUtil.equals(admin.getAdminStat(), "Y"))
 					{
-						CookieUtil.addCookie(response, "/", -1, AUTH_COOKIE_NAME, CookieUtil.stringToHex(adminId)); // -1 은 브라우저가 닫힐 떄까지
+						request.getSession().setAttribute("SESSION_USER_ID", adminId);
 						res.setResponse(0, "success");
 					}
 					else
