@@ -25,7 +25,7 @@
 	}
 </style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-<<<<<<< HEAD
+
   <div class="container-fluid">
     <div class="collapse navbar-collapse" id="navbarColor01">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -74,22 +74,4 @@
       <a class="nav-link text-white" href="/loginOut">로그아웃</a>
     </div>
   </div>
-=======
-    <div class="container-fluid">
-        <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link<c:if test="${_gnbNo == 1}"> active</c:if>" href="/user/list">회원관리
-                        <span class="visually-hidden">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link<c:if test="${_gnbNo == 2}"> active</c:if>" href="/notice/list">공지사항</a>
-                </li>
-            </ul>
-            <span style="color:white; text-decoration:none; padding-right: 3rem;">${gnbAdmName}</span>
-            <a style="color:white; text-decoration:none; padding-right: 1.5rem;" href="/loginOut">로그아웃</a>
-        </div>
-    </div>
->>>>>>> origin/master
 </nav>
