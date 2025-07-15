@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.sist.common.util.CookieUtil;
@@ -39,6 +40,9 @@ public class AuthInterceptor implements HandlerInterceptor
 	private static Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
 	
 	private String AUTH_COOKIE_NAME;
+	
+	@Value("#{env['auth.session.name']}")
+	private String AUTH_SESSION_NAME;
 	
 	private String AJAX_HEADER_NAME;
 	

@@ -35,10 +35,12 @@ public class UserController {
 	private UserService userService;
 	
 	// 쿠키명
-	@Value("#{env['auth.cookie.name']}")
-	private String AUTH_COOKIE_NAME;
+	/*
+	 * @Value("#{env['auth.cookie.name']}") private String AUTH_COOKIE_NAME;
+	 */
 	
-	
+	@Value("#{env['auth.session.name']}")
+	private String AUTH_SESSION_NAME;
 	
 	private static final int LIST_COUNT = 3;
 	private static final int PAGE_COUNT = 3;
@@ -194,9 +196,9 @@ public class UserController {
 	@RequestMapping(value="/loginOut", method=RequestMethod.GET)
 	public String loginOut(HttpServletRequest request, HttpServletResponse response)
 	{
-		if(CookieUtil.getCookie(request, AUTH_COOKIE_NAME) != null)
+		if(CookieUtil.getCookie(request, AUTH_SESSION_NAME) != null)
 		{
-			CookieUtil.deleteCookie(request, response, "/", AUTH_COOKIE_NAME);
+			CookieUtil.deleteCookie(request, response, "/", AUTH_SESSION_NAME);
 		}
 		
 
