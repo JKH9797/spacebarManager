@@ -20,4 +20,8 @@ public interface UserDao {
 	
 	// 사용자 정보 수정
 	public int userUpdate(User user);
+	
+	// 승인
+	public int userApprove(String userId);
+	   
 }

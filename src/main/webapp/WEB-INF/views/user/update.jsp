@@ -72,17 +72,17 @@ function fn_userUpdate()
 		return;
 	}
 	
-	if(icia.common.isEmpty($("#userEmail").val()))
+	if(icia.common.isEmpty($("#email").val()))
 	{
 		alert("이메일을 입력하세요.");
-		$("#userEmail").focus();
+		$("#email").focus();
 		return;
 	}
 	
-	if(!fn_validateEmail($("#userEmail").val()))
+	if(!fn_validateEmail($("#email").val()))
 	{
 		alert("이메일 형식이 올바르지 않습니다.");
-		$("#userEmail").focus();
+		$("#email").focus();
 		return;
 	}
 	
@@ -95,8 +95,8 @@ function fn_userUpdate()
 		userId:$("#userId").val(),
 		userPwd:$("#userPwd").val(),
 		userName:$("#userName").val(),
-		userEmail:$("#userEmail").val(),
-		status:$("#status").val()
+		email:$("#email").val(),
+		userStat:$("#userStat").val()
 	};
 	
 	$.ajax({
@@ -113,6 +113,9 @@ function fn_userUpdate()
 			if(res.code == 0)
 			{
 				alert("회원정보가 수정되었습니다.");
+				parent.$.colorbox.close();
+		        // 닫고 나서 부모 창의 리스트 리로드 함수 호출 (색상 초기화, 조회)
+		        parent.fn_pageInit2();
 			}
 			else if(res.code == -1)
 			{
@@ -180,19 +183,19 @@ function fn_idPwdCheck(val)
                   </td>
                   <th scope="row">이메일</th>
                   <td>
-                     <input type="text" id="userEmail" name="userEmail" value="${user.userEmail}" style="font-size:1rem;;" maxlength="50" placeholder="이메일" />
+                     <input type="text" id="email" name="email" value="${user.email}" style="font-size:1rem;;" maxlength="50" placeholder="이메일" />
                   </td>
                </tr>
                <tr>
                   <th scope="row">상태</th>
                   <td>
-                     <select id="status" name="status" style="font-size: 1rem; width: 7rem; height: 2rem;">
-                        <option value="Y" <c:if test="${user.status == 'Y'}">selected</c:if>>정상</option>
-                        <option value="N" <c:if test="${user.status == 'N'}">selected</c:if>>정지</option>
+                     <select id="userStat" name="userStat" style="font-size: 1rem; width: 7rem; height: 2rem;">
+                        <option value="Y" <c:if test="${user.userStat == 'Y'}">selected</c:if>>정상</option>
+                        <option value="N" <c:if test="${user.userStat == 'N'}">selected</c:if>>정지</option>
                      </select>
                   </td>
-                  <th scope="row">${user.regDate}</th>
-                  <td>TTT</td>
+                  <th scope="row">등록일</th>
+                  <td>${user.joinDt}</td>
                </tr>
             </tbody>
          </table>

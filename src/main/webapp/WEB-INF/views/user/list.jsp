@@ -58,7 +58,7 @@ function fn_paging(curPage)
 
 function fn_pageInit()
 {
-	$("#status option:eq(0)").prop("selected", true);
+	$("#userStat option:eq(0)").prop("selected", true);
 	$("#searchType option:eq(0)").prop("selected", true);
 	$("#searchValue").val("");
 }
@@ -66,12 +66,38 @@ function fn_pageInit()
 //color-box에서 호출됨.
 function fn_pageInit2()
 {
-	$("#status option:eq(0)").prop("selected", true);
+	$("#userStat option:eq(0)").prop("selected", true);
 	$("#searchType option:eq(0)").prop("selected", true);
 	$("#searchValue").val("");
 	
 	fn_search();
 }
+
+function approveUser(userId, btn) {
+	  if (!confirm("호스트를 승인 처리하시겠습니까?")) return;
+
+	  $.ajax({
+	    type: "POST",
+	    url: "/user/approve",
+	    data: { userId: userId },
+	    dataType: "json",           
+	    beforeSend: function(xhr) {
+	      xhr.setRequestHeader("AJAX", "true");
+	    },
+	    success: function(res) {
+	      if (res.code === 0) {
+	        
+	        $(btn).closest("td").text("승인");
+	      } else {
+	        alert("승인 실패: " + res.message);
+	      }
+	    },
+	    error: function(xhr, status, error) {
+	      console.error("승인 처리 에러:", status, error);
+	      alert("서버 에러가 발생했습니다. 다시 시도해주세요.");
+	    }
+	  });
+	}
 </script>
 </head>
 <body id="school_list">
@@ -80,10 +106,10 @@ function fn_pageInit2()
       <div class="mnb" style="display:flex; margin-bottom:0.8rem;">
          <h2 style="margin-right:auto; color: #525252;">회원 리스트</h2>
          <form class="d-flex" name="searchForm" id="searchForm" method="post" style="place-content: flex-end;">
-            <select id="status" name="status" style="font-size: 1rem; width: 6rem; height: 3rem;">
+            <select id="userStat" name="userStat" style="font-size: 1rem; width: 6rem; height: 3rem;">
                <option value="">상태</option>
-               <option value="Y" <c:if test="${status == 'Y'}">selected</c:if>>정상</option>
-               <option value="N" <c:if test="${status == 'N'}">selected</c:if>>정지</option>
+               <option value="Y" <c:if test="${userStat == 'Y'}">selected</c:if>>정상</option>
+               <option value="N" <c:if test="${userStat == 'N'}">selected</c:if>>정지</option>
             </select>
             <select id="searchType" name="searchType" style="font-size: 1rem; width: 8rem; height: 3rem; margin-left:.5rem; ">
                <option value="">검색타입</option>
@@ -103,20 +129,50 @@ function fn_pageInit2()
                <th scope="col" style="width:15%;">아이디</th>
                <th scope="col">이름</th>
                <th scope="col">이메일</th>
+               <th scope="col">전화번호</th>
+               <th scope="col">닉네임</th>
                <th scope="col">상태</th>
+               <th scope="col">사용자유형</th>
+               <th scope="col">승인상태</th>
                <th scope="col">등록일</th>
             </tr>
             </thead>
             <tbody>
             
    <c:if test="${!empty list}">
-   		<c:forEach items="${list}" var="user" varStatus="status">
+   		<c:forEach items="${list}" var="user" varStatus="userStat">
             <tr>
                 <th scope="row" class="table-thead-sub" style="border: 1px solid #c4c2c2;"><a href="/user/update?userId=${user.userId}" name="userUpdate">${user.userId}</a></th>
                 <td>${user.userName}</td>
-                <td>${user.userEmail}</td>
-                <td><c:if test="${user.status == 'Y'}">정상</c:if> <c:if test="${user.status == 'N'}">정지</c:if> </td>
-                <td>${user.regDate}</td>
+                <td>${user.email}</td>
+                <td>${user.phone}</td>
+                <td>${user.nickname}</td>
+                <td><c:if test="${user.userStat == 'Y'}">정상</c:if> <c:if test="${user.userStat == 'N'}">정지</c:if> </td>
+                <td><c:if test="${user.userType == 'G'}">게스트</c:if> <c:if test="${user.userType == 'H'}">호스트</c:if> </td>
+                <td>
+				  <c:choose>
+				    <c:when test="${user.userType == 'H'}">
+				      <c:choose>
+
+				        <c:when test="${user.approvStat == 'N'}">
+				          <button type="button"
+				                  onclick="approveUser('${user.userId}', this)">
+				            미승인
+				          </button>
+				        </c:when>
+
+				        <c:otherwise>
+				          승인
+				        </c:otherwise>
+				      </c:choose>
+				    </c:when>
+
+				    <c:otherwise>
+				      -
+				    </c:otherwise>
+				  </c:choose>
+				</td>
+                <td>${user.joinDt}</td>
             </tr>
         </c:forEach>    
 	</c:if>

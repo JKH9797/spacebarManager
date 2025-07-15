@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sist.common.util.CookieUtil;
@@ -53,20 +54,20 @@ public class UserController {
 		User user = new User();
 		
 		int curPage = HttpUtil.get(request, "curPage", 1);
-		String status = HttpUtil.get(request, "status", "");
+		String userStat = HttpUtil.get(request, "userStat", "");
 		String searchType = HttpUtil.get(request, "searchType", "");
 		String searchValue = HttpUtil.get(request, "searchValue", "");
 		
 		String gubun = "";
 		
-		if(!StringUtil.isEmpty(status))
+		if(!StringUtil.isEmpty(userStat))
 		{
-			//status = "Y";
-			user.setStatus(status);
+			//userStat = "Y";
+			user.setUserStat(userStat);
 		}
 		else
 		{
-			status = "";
+			userStat = "";
 		}
 		
 		if(!StringUtil.isEmpty(searchType) && !StringUtil.isEmpty(searchValue))
@@ -76,7 +77,7 @@ public class UserController {
 				user.setUserId(searchValue);
 				gubun = "Y";
 			}
-			else if(StringUtil.equals(searchValue, "2"))
+			else if(StringUtil.equals(searchType, "2"))
 			{
 				user.setUserName(searchValue);
 				gubun = "Y";
@@ -112,7 +113,7 @@ public class UserController {
 		model.addAttribute("searchType", searchType);
 		model.addAttribute("searchValue", searchValue);
 		model.addAttribute("curPage", curPage);
-		model.addAttribute("status", status);
+		model.addAttribute("userStat", userStat);
 		model.addAttribute("gubun", gubun);
 		
 		return "/user/list";
@@ -147,11 +148,11 @@ public class UserController {
 		String userId = HttpUtil.get(request, "userId");
 		String userPwd = HttpUtil.get(request, "userPwd");
 		String userName = HttpUtil.get(request, "userName");
-		String userEmail = HttpUtil.get(request, "userEmail");
-		String status = HttpUtil.get(request, "status");
+		String email = HttpUtil.get(request, "email");
+		String userStat = HttpUtil.get(request, "userStat");
 		
 		if(!StringUtil.isEmpty(userId) && !StringUtil.isEmpty(userPwd) && 
-				!StringUtil.isEmpty(userEmail) && !StringUtil.isEmpty(status))
+				!StringUtil.isEmpty(email) && !StringUtil.isEmpty(userStat))
 		{
 			User user = userService.userSelect(userId);
 			
@@ -159,8 +160,8 @@ public class UserController {
 			{
 				user.setUserPwd(userPwd);
 				user.setUserName(userName);
-				user.setUserEmail(userEmail);
-				user.setStatus(status);
+				user.setEmail(email);
+				user.setUserStat(userStat);
 				
 				if(userService.userUpdate(user) >0)
 				{
@@ -202,6 +203,24 @@ public class UserController {
 		return "redirect:/"; // 쿠키 삭제하기 위해
 	}
 	
+	//승인상태변경
+	@RequestMapping(value="/user/approve", method=RequestMethod.POST)
+	@ResponseBody
+	public Response<Object> approve(HttpServletRequest request, HttpServletResponse response) {
+	    Response<Object> res = new Response<>();
+	    String userId = HttpUtil.get(request, "userId");
+	    try {
+	        int cnt = userService.userApprove(userId);  // 서비스에서 apprvStat = 'Y' 로 업데이트
+	        if(cnt > 0) {
+	            res.setResponse(0, "success");
+	        } else {
+	            res.setResponse(-1, "fail");
+	        }
+	    } catch(Exception e) {
+	        res.setResponse(-1, "server error");
+	    }
+	    return res;
+	}
 }
 
 

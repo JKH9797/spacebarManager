@@ -6,9 +6,19 @@
 		<id column="USER_ID" property="userId" />
 		<result column="USER_PWD" property="userPwd" />
 		<result column="USER_NAME" property="userName" />
-		<result column="USER_EMAIL" property="userEmail" />
-		<result column="STATUS" property="status" />
-		<result column="REG_DATE" property="regDate" />
+		<result column="EMAIL" property="email" />
+		<result column="USER_STAT" property="userStat" />
+		<result column="JOIN_DT" property="joinDt" />
+		<result column="PHONE" property="phone" />
+		<result column="USER_ADDR" property="userAddr" />
+		<result column="NICKNAME" property="nickname" />
+		<result column="GENDER" property="gender" />
+		<result column="BIRTH_DT" property="birthDt" />
+		<result column="MILE" property="mile" />
+		<result column="USER_TYPE" property="userType" />
+		<result column="APPROV_STAT" property="approvStat" />
+		<result column="PROF_IMG_EXT" property="profImgExt" />
+		
 	</resultMap>						   
 				  
 		
@@ -16,27 +26,40 @@
 				SELECT  USER_ID,
 				        USER_PWD,
 				        USER_NAME,
-				        USER_EMAIL,
-				        STATUS,
-				        REG_DATE
+				        EMAIL,
+				        USER_STAT,
+				        JOIN_DT,
+				        PHONE,
+				        NICKNAME,
+				        USER_TYPE,
+				        APPROV_STAT
 				FROM ( SELECT  ROWNUM AS RNUM,
 				                USER_ID,
 				                USER_PWD,
 				                USER_NAME,
-				                USER_EMAIL,
-				                STATUS,
-				                REG_DATE
+				                EMAIL,
+				                USER_STAT,
+				                JOIN_DT,
+				                PHONE,
+				                NICKNAME,
+				                USER_TYPE,
+				                APPROV_STAT
 				        FROM (           SELECT  USER_ID,
 				                                NVL(USER_PWD, '') USER_PWD,
 				                                NVL(USER_NAME, '') USER_NAME,
-				                                NVL(USER_EMAIL, '') USER_EMAIL,
-				                                NVL(STATUS, 'N') STATUS,
-				                                NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') REG_DATE
-				                          FROM  TBL_USER
+				                                NVL(EMAIL, '') EMAIL,
+				                                NVL(USER_STAT, 'N') USER_STAT,
+				                                NVL(TO_CHAR(JOIN_DT, 'YYYY.MM.DD HH24:MI:SS'), '') JOIN_DT,
+				                                NVL(PHONE, '') PHONE,
+				                                NVL(NICKNAME, '') NICKNAME,
+				                                NVL(USER_TYPE, '') USER_TYPE,
+				                                NVL(APPROV_STAT, '') APPROV_STAT
+
+				                          FROM  SB_USER
 				                         WHERE  1=1 
 				                         
-				                 <if test='status != null and status != ""'>        
-				                           AND  STATUS LIKE '%' || #{status} || '%'
+				                 <if test='userStat != null and userStat != ""'>        
+				                           AND  USER_STAT LIKE '%' || #{userStat} || '%'
 				                 </if> 
 				                 <if test='userId != null and userId !=""'>         
 				                           AND  USER_ID LIKE '%' || #{userId} || '%'
@@ -44,7 +67,7 @@
 				                 <if test='userName != null and userName !=""'>
 				                           AND  USER_NAME LIKE '%' || #{userName} || '%'
 				                 </if>
-				                         ORDER BY REG_DATE DESC))
+				                         ORDER BY JOIN_DT DESC))
 				                         
 				WHERE RNUM <![CDATA[>=]]> #{startRow}
 				  AND RNUM <![CDATA[<=]]> #{endRow}
@@ -52,10 +75,10 @@
 	
 	<select id="userListCount" parameterType="com.sist.manager.model.User" resultType="int">
 	SELECT COUNT(USER_ID) CNT
-	  FROM  TBL_USER
+	  FROM  SB_USER
 	 WHERE  1=1 
-	 <if test='status != null and status != ""'>
-	   AND  STATUS LIKE '%' || #{status} || '%'
+	 <if test='userStat != null and userStat != ""'>
+	   AND  USER_STAT LIKE '%' || #{userStat} || '%'
 	 </if>
 	 <if test='userId != null and userId != ""'>
 	   AND  USER_ID LIKE '%' || #{userId} || '%'
@@ -70,22 +93,26 @@
 				    USER_ID,
 				    NVL(USER_PWD, '') USER_PWD,
 				    NVL(USER_NAME, '') USER_NAME,
-				    NVL(USER_EMAIL, '') USER_EMAIL,
-				    NVL(STATUS, 'N') STATUS,
-				    NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') REG_DATE
-				FROM TBL_USER
+				    NVL(EMAIL, '') EMAIL,
+				    NVL(USER_STAT, 'N') USER_STAT,
+				    NVL(TO_CHAR(JOIN_DT, 'YYYY.MM.DD HH24:MI:SS'), '') JOIN_DT
+				FROM SB_USER
 				WHERE USER_ID = #{value}
 	</select>
 	
 	<update id="userUpdate" parameterType="com.sist.manager.model.User">
-				UPDATE TBL_USER
+				UPDATE SB_USER
 				   SET USER_PWD = #{userPwd},
 				       USER_NAME = #{userName},
-				       USER_EMAIL = #{userEmail},
-				       STATUS = #{status}
+				       EMAIL = #{email},
+				       USER_STAT = #{userStat}
 				WHERE USER_ID = #{userId}
+	</update>
 	
-	
+	<update id="userApprove" parameterType="String">
+	  UPDATE SB_USER
+	     SET approv_stat = 'Y'
+	   WHERE user_id     = #{value}
 	</update>
   
 </mapper>

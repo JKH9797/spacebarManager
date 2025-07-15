@@ -86,20 +86,20 @@ public class IndexController
 	{
 		Response<Object> res = new Response<Object>();
 		
-		String admId = HttpUtil.get(request, "admId");
-		String admPwd = HttpUtil.get(request, "admPwd");
+		String adminId = HttpUtil.get(request, "adminId");
+		String adminPwd = HttpUtil.get(request, "adminPwd");
 		
-		if(!StringUtil.isEmpty(admId) && !StringUtil.isEmpty(admPwd))
+		if(!StringUtil.isEmpty(adminId) && !StringUtil.isEmpty(adminPwd))
 		{
-			Admin admin = adminService.adminSelect(admId);
+			Admin admin = adminService.adminSelect(adminId);
 			
 			if(admin != null)
 			{
-				if(StringUtil.equals(admPwd, admin.getAdmPwd()))
+				if(StringUtil.equals(adminPwd, admin.getAdminPwd()))
 				{
-					if(StringUtil.equals(admin.getStatus(), "Y"))
+					if(StringUtil.equals(admin.getAdminStat(), "Y"))
 					{
-						CookieUtil.addCookie(response, "/", -1, AUTH_COOKIE_NAME, CookieUtil.stringToHex(admId)); // -1 은 브라우저가 닫힐 떄까지
+						CookieUtil.addCookie(response, "/", -1, AUTH_COOKIE_NAME, CookieUtil.stringToHex(adminId)); // -1 은 브라우저가 닫힐 떄까지
 						res.setResponse(0, "success");
 					}
 					else

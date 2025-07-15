@@ -22,7 +22,7 @@
 <script type="text/javascript">
 $(document).ready(function() 
 {
-	$("#admId").keyup(function(e) 
+	$("#adminId").keyup(function(e) 
 	{
 	    if(e.which == 13) 
 	    {
@@ -30,7 +30,7 @@ $(document).ready(function()
 	    }
 	});
 	
-	$("#admPwd").keyup(function(e) 
+	$("#adminPwd").keyup(function(e) 
 	{
 	    if(e.which == 13) 
 	    {
@@ -38,25 +38,25 @@ $(document).ready(function()
 	    }
 	});
 			
-	$("#admId").focus();	
+	$("#adminId").focus();	
 });
 
 
 function fn_loginCheck()
 {
-	if($.trim($("#admId").val()).length <= 0)
+	if($.trim($("#adminId").val()).length <= 0)
 	{
 		alert("아이디를 입력하세요");
-		$("#admId").val("");
-		$("#admId").focus();
+		$("#adminId").val("");
+		$("#adminId").focus();
 		return;
 	}
 	
-	if($.trim($("#admPwd").val()).length <= 0)
+	if($.trim($("#adminPwd").val()).length <= 0)
 	{
 		alert("비밀번호를 입력하세요.");
-		$("#admPwd").val("");
-		$("#admPwd").focus();
+		$("#adminPwd").val("");
+		$("#adminPwd").focus();
 		return;
 	}
 	
@@ -64,8 +64,8 @@ function fn_loginCheck()
 		type:"POST",
 		url:"/loginProc",
 		data:{
-			admId:$("#admId").val(),
-			admPwd:$("#admPwd").val()
+			adminId:$("#adminId").val(),
+			adminPwd:$("#adminPwd").val()
 		},
 		datatype:"JSON",
 		beforeSend:function(xhr)
@@ -76,33 +76,33 @@ function fn_loginCheck()
 		{
 			if(res.code == 0)
 			{
-				// location.href = "/user/list";
-				// alert("로그인 성공");
+				location.href = "/user/list";
+				alert("로그인 성공");
 			}
 			else if(res.code == -1)
 			{
 				alert("비밀번호가 일치하지 않습니다.");
-				$("#admPwd").focus();
+				$("#adminPwd").focus();
 			}
 			else if(res.code == 400)
 			{
 				alert("파라미터가 올바르지 않습니다.");
-				$("#admId").focus();
+				$("#adminId").focus();
 			}
 			else if(res.code == 403)
 			{
 				alert("관리자 아이디를 사용할 수 없습니다.");
-				$("#admId").focus();
+				$("#adminId").focus();
 			}
 			else if(res.code == 404)
 			{
 				alert("관리자 정보가 존재하지 않습니다.");
-				$("#admId").focus();
+				$("#adminId").focus();
 			}
 			else
 			{
 				alert("로그인이 실패하였습니다.");
-				$("#admId").focus();
+				$("#adminId").focus();
 			}
 		},
 		error:function(error)
@@ -124,12 +124,12 @@ function fn_loginCheck()
 	            <h2 style="margin-top: 3%; margin-bottom:3%;">관리자</h2>
 	        </div>
 	        <div class="input-id">
-	            <label for="admId" style="position:relative; left: .4rem; top:-.1rem; height:3rem"><img src="/resources/images/login/account_icon.png" style="height:3.4rem;"></label>
-	            <input type="text" id="admId" name="admId" style="font-size:1rem; width: 70%; height:3rem; margin-bottom:3%;" maxlength="50" value="" title="아이디 입력" placeholder="아이디 입력" />
+	            <label for="adminId" style="position:relative; left: .4rem; top:-.1rem; height:3rem"><img src="/resources/images/login/account_icon.png" style="height:3.4rem;"></label>
+	            <input type="text" id="adminId" name="adminId" style="font-size:1rem; width: 70%; height:3rem; margin-bottom:3%;" maxlength="50" value="" title="아이디 입력" placeholder="아이디 입력" />
 	        </div>
 	        <div class="input-password">
-	            <label for="admPwd" style="position:relative; left: .4rem; top:-.1rem; height:3rem"><img src="/resources/images/login/password_icon.png" style="height:3.4rem;"></label>
-	            <input type="password" id="admPwd" name="admPwd" style="font-size:1rem; width: 70%; height:3rem; margin-bottom:3%;" maxlength="50" title="비밀번호 입력" placeholder="비밀번호 입력" />
+	            <label for="adminPwd" style="position:relative; left: .4rem; top:-.1rem; height:3rem"><img src="/resources/images/login/password_icon.png" style="height:3.4rem;"></label>
+	            <input type="password" id="adminPwd" name="adminPwd" style="font-size:1rem; width: 70%; height:3rem; margin-bottom:3%;" maxlength="50" title="비밀번호 입력" placeholder="비밀번호 입력" />
 	        </div>
 	        </form>
 	    </div>

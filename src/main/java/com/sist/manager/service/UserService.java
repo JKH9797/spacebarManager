@@ -85,4 +85,9 @@ public class UserService {
 		
 		return count;
 	}
+	
+	// 승인버튼
+	public int userApprove(String userId) {
+	    return userDao.userApprove(userId);
+	}
 }
