@@ -35,10 +35,12 @@ public class UserController {
 	private UserService userService;
 	
 	// 쿠키명
-	@Value("#{env['auth.cookie.name']}")
-	private String AUTH_COOKIE_NAME;
+	/*
+	 * @Value("#{env['auth.cookie.name']}") private String AUTH_COOKIE_NAME;
+	 */
 	
-	
+	@Value("#{env['auth.session.name']}")
+	private String AUTH_SESSION_NAME;
 	
 	private static final int LIST_COUNT = 10;
 	private static final int PAGE_COUNT = 3;
