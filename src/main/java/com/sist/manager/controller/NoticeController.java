@@ -1,6 +1,8 @@
 package com.sist.manager.controller;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -50,12 +52,15 @@ public class NoticeController {
     @GetMapping("/detail")
     public String detail(@RequestParam int noticeSeq, Model model) {
         Notice notice = noticeService.getNoticeById(noticeSeq);
+        
+        List<NoticeReply> noticeReplies = noticeService.getReplies(noticeSeq);
 
         if (notice == null) {
             return "redirect:/notice/list";
         }
 
         model.addAttribute("notice", notice);
+        model.addAttribute("noticeReplies", noticeReplies);
         return "/notice/noticeDetail"; // 뷰 이름만 리턴
     }
 
@@ -137,6 +142,54 @@ public class NoticeController {
 	    noticeService.updateNotice(dto);
 	    return "redirect:/notice/detail?noticeSeq=" + dto.getNoticeSeq();
     }
+    
+    @PostMapping("/reply/editProc")
+    @ResponseBody
+    public Response<Object> editReply(
+            @RequestParam int replySeq,
+            @RequestParam String replyContent,
+            HttpSession session) {
+
+        Response<Object> ajax = new Response<>();
+        String userId = (String) session.getAttribute(AUTH_SESSION_NAME);
+
+        if (userId == null) {
+            ajax.setResponse(500, "로그인 후 이용하세요.");
+            return ajax;
+        }
+
+        // (서비스에 위임) 댓글 소유자 확인 & 업데이트
+        boolean ok = noticeService.updateReply(replySeq, userId, replyContent);
+        if (ok) {
+            ajax.setResponse(0, "수정되었습니다.");
+        } else {
+            ajax.setResponse(400, "수정 권한이 없거나 실패했습니다.");
+        }
+        return ajax;
+    }
+    
+    @PostMapping("/reply/deleteProc")
+    @ResponseBody
+    public Response<Object> deleteReply(
+            @RequestParam("replySeq") int replySeq,
+            HttpSession session) {
+
+        Response<Object> ajax = new Response<>();
+        String userId = (String) session.getAttribute(AUTH_SESSION_NAME);
+        if (userId == null) {
+            ajax.setResponse(500, "로그인 후 이용하세요.");
+            return ajax;
+        }
+
+        boolean ok = noticeService.deleteReply(replySeq, userId);
+        if (ok) {
+            ajax.setResponse(0, "삭제되었습니다.");
+        } else {
+            ajax.setResponse(400, "삭제 권한이 없거나 실패했습니다.");
+        }
+        return ajax;
+    }
+    
 
 
 

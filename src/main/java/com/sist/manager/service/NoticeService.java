@@ -55,4 +55,16 @@ public class NoticeService {
         return noticeDao.updateNotice(notice);
     }
     
+    //댓글수정
+    public boolean updateReply(int replySeq, String userId, String replyContent) {
+        int updated = noticeDao.updateReply(replySeq, userId, replyContent);
+        return updated > 0;
+    }
+    
+    //댓글삭제
+    public boolean deleteReply(int replySeq, String userId) {
+        int cnt = noticeDao.deleteReply(replySeq, userId);
+        return cnt > 0;
+    }
+    
 }

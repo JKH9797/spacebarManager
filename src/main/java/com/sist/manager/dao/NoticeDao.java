@@ -2,6 +2,7 @@ package com.sist.manager.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.sist.manager.model.Notice;
@@ -21,5 +22,13 @@ public interface NoticeDao
     List<NoticeReply> selectRepliesByNotice(int noticeSeq);
     
     public int updateNotice(Notice notice);
-
+    
+    int updateReply(
+            @Param("replySeq")      int replySeq,
+            @Param("userId")        String userId,
+            @Param("replyContent")  String replyContent
+        );
+    
+    int deleteReply(@Param("replySeq") int replySeq,
+            @Param("userId")   String userId);
 } 

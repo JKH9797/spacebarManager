@@ -77,8 +77,8 @@
           <td><a href="/notice/detail?noticeSeq=${n.noticeSeq}">${n.noticeTitle}</a></td>
           <td>${n.adminId}</td>
           <td><c:if test="${n.noticeStat == 'Y'}">공개</c:if> <c:if test="${n.noticeStat == 'N'}">숨김</c:if> </td>
-          <td><fmt:formatDate value="${n.regDt}" pattern="yyyy-MM-dd" /></td>
-          <td><fmt:formatDate value="${n.updateDt}" pattern="yyyy-MM-dd" /></td>
+          <td><fmt:formatDate value="${n.regDt}" pattern="yyyy-MM-dd HH:mm" /></td>
+          <td><fmt:formatDate value="${n.updateDt}" pattern="yyyy-MM-dd HH:mm" /></td>
         </tr>
       </c:forEach>
       <c:if test="${empty noticeList}">
