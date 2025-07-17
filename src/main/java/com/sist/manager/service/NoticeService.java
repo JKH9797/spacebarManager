@@ -9,6 +9,7 @@ import com.sist.manager.dao.NoticeDao;
 import com.sist.manager.model.Notice;
 import com.sist.manager.model.NoticeReply;
 
+
 @Service
 public class NoticeService {
 
@@ -31,9 +32,13 @@ public class NoticeService {
     }
 
     // 공지사항 등록
-    public void writeNotice(Notice notice) {
-        noticeDao.insertNotice(notice);
-    }
+    public int insertNotice(Notice notice) throws Exception
+	{
+		
+		int count = noticeDao.insertNotice(notice);
+		
+		return count;
+	}
 
     // 댓글 등록
     public void writeReply(NoticeReply reply) {
@@ -44,4 +49,10 @@ public class NoticeService {
     public List<NoticeReply> getReplies(int noticeSeq) {
         return noticeDao.selectRepliesByNotice(noticeSeq);
     }
+    
+    //공지사항 수정
+    public int updateNotice(Notice notice) {
+        return noticeDao.updateNotice(notice);
+    }
+    
 }

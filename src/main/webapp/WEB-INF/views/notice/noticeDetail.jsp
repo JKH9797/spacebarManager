@@ -98,6 +98,17 @@
     </div>
     <div class="notice-content">${notice.noticeContent}</div>
   </div>
+  
+  <c:if test="${sessionScope.SESSION_USER_ID == notice.adminId}">
+    <div style="margin-top:20px;">
+      <a href="${pageContext.request.contextPath}/notice/edit?noticeSeq=${notice.noticeSeq}"
+         class="btn btn-warning">
+        공지 수정
+      </a>
+      
+    </div>
+  </c:if>
+  
 
   <div class="reply-section">
     <h3 class="section-heading" style="border-color:#28a745;">댓글 목록</h3>
@@ -109,19 +120,20 @@
           <div class="reply-content">${r.replyContent}</div>
         </li>
       </c:forEach>
+      
       <c:if test="${empty notice.replies}">
         <li>등록된 댓글이 없습니다.</li>
       </c:if>
     </ul>
 
-    <c:if test="${not empty sessionScope.sessionUserId}">
+    <c:if test="${not empty sessionScope.SESSION_USER_ID}">
       <form action="/notice/reply" method="post" class="reply-form">
         <input type="hidden" name="noticeSeq" value="${notice.noticeSeq}" />
         <textarea name="replyContent" placeholder="댓글을 입력하세요." required></textarea>
         <button type="submit" class="btn btn-primary">댓글 등록</button>
       </form>
     </c:if>
-    <c:if test="${empty sessionScope.sessionUserId}">
+    <c:if test="${empty sessionScope.SESSION_USER_ID}">
       <p>댓글 작성은 로그인 후 이용 가능합니다.</p>
     </c:if>
   </div>
@@ -131,6 +143,6 @@
 
 <script src="${pageContext.request.contextPath}/resources/js/bootstrap.bundle.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/aos.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/custom.js"></script>
+
 </body>
 </html>

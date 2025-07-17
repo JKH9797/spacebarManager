@@ -45,7 +45,7 @@
         <li class="nav-item">
           <a 
             class="nav-link ${_gnbNo == 2 ? 'active' : ''}" 
-            href="/notice/noticeList"
+            href="/notice/list"
             aria-current="${_gnbNo == 2 ? 'page' : ''}">
             공지사항
             <c:if test="${_gnbNo == 2}">
@@ -57,7 +57,7 @@
         <li class="nav-item">
           <a 
             class="nav-link ${_gnbNo == 3 ? 'active' : ''}" 
-            href="/qna/qnaList"
+            href="/qna/list"
             aria-current="${_gnbNo == 3 ? 'page' : ''}">
             QnA
             <c:if test="${_gnbNo == 3}">

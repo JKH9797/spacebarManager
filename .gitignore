@@ -1,0 +1,38 @@
+# User specified
+/src/main/webapp/WEB-INF/views/resources/upload/
+/src/main/webapp/WEB-INF/lib/
+src/main/webapp/WEB-INF/views/resources/upload/
+src/main/webapp/WEB-INF/lib/
+src/main/webapp/resources/
+/upload/
+
+# 빌드 결과물 무시
+/target/
+target/
+/build/
+build/
+.gradle/
+*.class
+*.jar                                     
+/src/main/webapp/WEB-INF/classes/            
+
+
+# ❗ 중복 폴더 방지 (팀원이 잘못 커밋한 것 차단)
+spacebar/
+project/
+
+# Eclipse 설정
+.classpath
+.project
+.settings/
+
+
+
+# 로그/임시파일 무시
+*.log
+logs/
+*.tmp
+hs_err_pid*
+
+# 민감한 설정파일 (예: 실제 DB 비번 등)
+/src/main/resources/config/db.properties

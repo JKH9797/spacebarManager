@@ -14,9 +14,12 @@ public interface NoticeDao
 	
     Notice selectNoticeDetail(int noticeSeq);
     
-    void insertNotice(Notice notice);
+    int insertNotice(Notice notice);
     
     void insertReply(NoticeReply reply);
     
     List<NoticeReply> selectRepliesByNotice(int noticeSeq);
+    
+    public int updateNotice(Notice notice);
+
 } 

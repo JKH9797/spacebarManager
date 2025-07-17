@@ -74,6 +74,7 @@ public class IndexController {
 					{
 						request.getSession().setAttribute("SESSION_USER_ID", adminId);
 						res.setResponse(0, "success");
+						
 					} else {
 						res.setResponse(403, "server error");
 					}
