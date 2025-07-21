@@ -45,9 +45,9 @@
         <li class="nav-item">
           <a 
             class="nav-link ${_gnbNo == 2 ? 'active' : ''}" 
-            href="/notice/list"
+            href="/room/list"
             aria-current="${_gnbNo == 2 ? 'page' : ''}">
-            공지사항
+            숙소/공간관리
             <c:if test="${_gnbNo == 2}">
               <span class="visually-hidden">(current)</span>
             </c:if>
@@ -57,9 +57,9 @@
         <li class="nav-item">
           <a 
             class="nav-link ${_gnbNo == 3 ? 'active' : ''}" 
-            href="/qna/list"
+            href="/notice/list"
             aria-current="${_gnbNo == 3 ? 'page' : ''}">
-            QnA
+            공지사항
             <c:if test="${_gnbNo == 3}">
               <span class="visually-hidden">(current)</span>
             </c:if>

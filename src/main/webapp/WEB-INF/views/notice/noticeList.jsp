@@ -5,7 +5,7 @@
 
 <%
    // GNB 번호 (사용자관리)
-   request.setAttribute("_gnbNo", 2);
+   request.setAttribute("_gnbNo", 3);
 %>
 
 <!DOCTYPE html>
