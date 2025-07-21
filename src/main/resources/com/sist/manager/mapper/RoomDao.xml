@@ -106,7 +106,7 @@
           AND REGION LIKE '%' || #{region} || '%'
         </if>
         <if test="roomTitle != null and roomTitle != ''">
-          AND ROOM_TITLE LIKE '%' || #{"roomTitle"} || '%'
+          AND ROOM_TITLE LIKE '%' || #{roomTitle} || '%'
         </if>
         <if test="delYn != null and delYn != ''">
           AND DEL_YN = #{delYn}
@@ -129,22 +129,22 @@
       FROM ROOM A, ROOM_CATEGORY B
      WHERE A.ROOM_CAT_SEQ = B.ROOM_CAT_SEQ
        <if test="roomCatName != null and roomCatName != ''">
-          AND ROOM_CAT_NAME LIKE '%' || #{roomCatName} || '%'
+          AND B.ROOM_CAT_NAME LIKE '%' || #{roomCatName} || '%'
         </if>
         <if test="hostId != null and hostId != ''">
-          AND HOST_ID LIKE '%' || #{hostId} || '%'
+          AND A.HOST_ID LIKE '%' || #{hostId} || '%'
         </if>
         <if test="region != null and region != ''">
-          AND REGION LIKE '%' || #{region} || '%'
+          AND A.REGION LIKE '%' || #{region} || '%'
         </if>
         <if test="roomTitle != null and roomTitle != ''">
-          AND ROOM_TITLE LIKE '%' || #{"roomTitle"} || '%'
+          AND A.ROOM_TITLE LIKE '%' || #{roomTitle} || '%'
         </if>
         <if test="delYn != null and delYn != ''">
-          AND DEL_YN = #{delYn}
+          AND A.DEL_YN LIKE '%' || #{delYn} || '%'
         </if>
         <if test="saleYn != null and saleYn != ''">
-          AND SALE_YN = #{saleYn}
+          AND A.SALE_YN LIKE '%' || #{saleYn} || '%'
         </if>
   </select>
 	

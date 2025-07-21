@@ -53,8 +53,8 @@ public class Room implements Serializable{
 		reviewCount = 0;
 		minTimes = 0;
 		maxTimes = 0;
-		delYn = "N";
-		saleYn = "Y";
+		delYn = "";
+		saleYn = "";
 		roomCatName ="";
 		
 		startRow = 0;

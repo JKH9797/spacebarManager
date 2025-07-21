@@ -103,16 +103,16 @@
          
          <select id="saleYn" name="saleYn" style="font-size: 1rem; width: 3rem; height: 3rem; margin-left:.5rem;">
             <option value="">판매상태</option>
-            <option value="Y" <c:if test="${delYn == 'Y'}">selected</c:if>>판매중</option>
-            <option value="N" <c:if test="${delYn == 'N'}">selected</c:if>>판매중지</option>
+            <option value="Y" <c:if test="${saleYn == 'Y'}">selected</c:if>>판매중</option>
+            <option value="N" <c:if test="${saleYn == 'N'}">selected</c:if>>판매중지</option>
          </select>
       
         <select name="searchType" style="font-size:1rem; width:6rem; height:3rem;">
           <option value="">검색타입</option>
-          <option value="roomTitle"  <c:if test="${searchType=='1'}">selected</c:if>>제목</option>
-          <option value="hostId"  <c:if test="${searchType=='2'}">selected</c:if>>호스트아이디</option>
-          <option value="category"   <c:if test="${searchType=='3'}">selected</c:if>>카테고리</option>
-          <option value="region" <c:if test="${searchType=='4'}">selected</c:if>>지역</option>
+          <option value="1"  <c:if test="${searchType=='1'}">selected</c:if>>제목</option>
+          <option value="2"  <c:if test="${searchType=='2'}">selected</c:if>>호스트아이디</option>
+          <option value="3"  <c:if test="${searchType=='3'}">selected</c:if>>카테고리</option>
+          <option value="4"  <c:if test="${searchType=='4'}">selected</c:if>>지역</option>
         </select>
         <input name="searchValue" class="form-control" 
                style="width:15rem; margin-left:.5rem;" 
@@ -155,7 +155,7 @@
                         onclick="toggleDelete(${room.roomSeq}, this)">
                   <c:choose>
                     <c:when test="${room.delYn=='N'}">삭제</c:when>
-                    <c:otherwise>복원</c:otherwise>
+                    <c:when test="${room.delYn=='Y'}">복원</c:when>
                   </c:choose>
                 </button>
               </td>
@@ -164,7 +164,7 @@
                         onclick="toggleSale(${room.roomSeq}, this)">
                   <c:choose>
                     <c:when test="${room.saleYn=='Y'}">판매중</c:when>
-                    <c:otherwise>판매중지</c:otherwise>
+                    <c:when test="${room.saleYn=='N'}">판매중지</c:when>
                   </c:choose>
                 </button>
               </td>

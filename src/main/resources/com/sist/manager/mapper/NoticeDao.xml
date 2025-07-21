@@ -93,12 +93,7 @@
     WHERE REPLY_SEQ = #{replySeq}
   </delete>
 
-	<select id="selectRepliesByNotice" parameterType="int" resultType="com.sist.manager.model.NoticeReply">
-	    SELECT REPLY_SEQ, NOTICE_SEQ, USER_ID, REPLY_CONTENT, REG_DT
-	    FROM NOTICE_REPLY
-	    WHERE NOTICE_SEQ = #{noticeSeq}
-	    ORDER BY REPLY_SEQ ASC
-	</select>
+
 
 </mapper>
 
