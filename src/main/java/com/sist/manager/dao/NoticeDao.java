@@ -25,7 +25,6 @@ public interface NoticeDao
     
     int updateReply(
             @Param("replySeq")      int replySeq,
-            @Param("userId")        String userId,
             @Param("replyContent")  String replyContent
         );
     

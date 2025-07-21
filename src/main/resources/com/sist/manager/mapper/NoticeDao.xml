@@ -88,7 +88,6 @@
     UPDATE NOTICE_REPLY
        SET REPLY_CONTENT = #{replyContent}
      WHERE REPLY_SEQ    = #{replySeq}
-       AND USER_ID      = #{userId}
   </update>
   
   <!-- 댓글 삭제 -->

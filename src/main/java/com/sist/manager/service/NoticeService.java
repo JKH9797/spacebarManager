@@ -56,8 +56,8 @@ public class NoticeService {
     }
     
     //댓글수정
-    public boolean updateReply(int replySeq, String userId, String replyContent) {
-        int updated = noticeDao.updateReply(replySeq, userId, replyContent);
+    public boolean updateReply(int replySeq, String replyContent) {
+        int updated = noticeDao.updateReply(replySeq, replyContent);
         return updated > 0;
     }
     

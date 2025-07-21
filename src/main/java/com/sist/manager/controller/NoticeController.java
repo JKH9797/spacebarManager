@@ -159,7 +159,7 @@ public class NoticeController {
         }
 
         // (서비스에 위임) 댓글 소유자 확인 & 업데이트
-        boolean ok = noticeService.updateReply(replySeq, userId, replyContent);
+        boolean ok = noticeService.updateReply(replySeq, replyContent);
         if (ok) {
             ajax.setResponse(0, "수정되었습니다.");
         } else {
