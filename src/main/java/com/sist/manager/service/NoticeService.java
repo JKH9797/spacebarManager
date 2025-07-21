@@ -62,8 +62,8 @@ public class NoticeService {
     }
     
     //댓글삭제
-    public boolean deleteReply(int replySeq, String userId) {
-        int cnt = noticeDao.deleteReply(replySeq, userId);
+    public boolean deleteReply(int replySeq) {
+        int cnt = noticeDao.deleteReply(replySeq);
         return cnt > 0;
     }
     

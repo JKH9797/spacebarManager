@@ -28,6 +28,5 @@ public interface NoticeDao
             @Param("replyContent")  String replyContent
         );
     
-    int deleteReply(@Param("replySeq") int replySeq,
-            @Param("userId")   String userId);
+    int deleteReply(@Param("replySeq") int replySeq);
 } 

@@ -94,7 +94,6 @@
   <delete id="deleteReply" parameterType="map">
     DELETE FROM NOTICE_REPLY
     WHERE REPLY_SEQ = #{replySeq}
-      AND USER_ID   = #{userId}
   </delete>
 
 </mapper>

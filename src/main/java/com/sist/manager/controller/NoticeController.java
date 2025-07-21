@@ -181,7 +181,7 @@ public class NoticeController {
             return ajax;
         }
 
-        boolean ok = noticeService.deleteReply(replySeq, userId);
+        boolean ok = noticeService.deleteReply(replySeq);
         if (ok) {
             ajax.setResponse(0, "삭제되었습니다.");
         } else {
