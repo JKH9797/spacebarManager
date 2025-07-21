@@ -52,6 +52,7 @@
             var now = $(btn).text() === "삭제" ? "복원" : "삭제";
             $(btn).text(now);
             alert("처리되었습니다.");
+            location.reload();
           } else {
             alert("실패: " + res.message);
           }
@@ -74,6 +75,7 @@
             var now = $(btn).text() === "판매중" ? "판매중지" : "판매중";
             $(btn).text(now);
             alert("처리되었습니다.");
+            location.reload();
           } else {
             alert("실패: " + res.message);
           }
