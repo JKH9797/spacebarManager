@@ -45,28 +45,27 @@
     <!-- 공지사항 등록 -->
     <insert id="insertNotice" parameterType="com.sist.manager.model.Notice" >
     	<selectKey resultType="int" keyProperty="noticeSeq" order="BEFORE">
-					SELECT SEQ_NOTICE_SEQ.NEXTVAL FROM DUAL
+					SELECT 
+					SEQ_NOTICE_SEQ.NEXTVAL 
+					FROM DUAL
 				</selectKey>
     	
         INSERT INTO NOTICE
-    (NOTICE_SEQ, NOTICE_TITLE, NOTICE_CONTENT, ADMIN_ID, NOTICE_STAT, REG_DT, UPDATE_DT)
-  VALUES
-    (#{noticeSeq}, #{noticeTitle}, #{noticeContent}, #{adminId},
-     'Y', SYSDATE, SYSDATE)
+    	(NOTICE_SEQ, NOTICE_TITLE, NOTICE_CONTENT, ADMIN_ID, NOTICE_STAT, REG_DT, UPDATE_DT)
+  		VALUES
+    	(#{noticeSeq}, #{noticeTitle}, #{noticeContent}, #{adminId}, 'Y', SYSDATE, SYSDATE)
     </insert>
     
     <!-- 공지사항 수정 -->
     <update id="updateNotice" parameterType="com.sist.manager.model.Notice">
     	UPDATE NOTICE
-    SET NOTICE_TITLE   = #{noticeTitle},
-        NOTICE_CONTENT = #{noticeContent},
-        NOTICE_STAT    = #{noticeStat},
-        UPDATE_DT      = SYSDATE
-    WHERE NOTICE_SEQ = #{noticeSeq}
+    	   SET NOTICE_TITLE   = #{noticeTitle},
+        	   NOTICE_CONTENT = #{noticeContent},
+        	   NOTICE_STAT    = #{noticeStat},
+        	   UPDATE_DT      = SYSDATE
+    	 WHERE NOTICE_SEQ = #{noticeSeq}
     </update>
    	
-    
-
     <!-- 댓글 등록 -->
     <insert id="insertReply" parameterType="com.sist.manager.model.NoticeReply">
         INSERT INTO NOTICE_REPLY (REPLY_SEQ, NOTICE_SEQ, USER_ID, REPLY_CONTENT)
@@ -74,9 +73,7 @@
     </insert>
 
     <!-- 댓글 목록 -->
-    <select id="selectRepliesByNotice"
-        resultMap="NoticeReplyMap"
-        parameterType="int">
+    <select id="selectRepliesByNotice" resultMap="NoticeReplyMap" parameterType="int">
 	  SELECT * 
 	    FROM NOTICE_REPLY 
 	   WHERE NOTICE_SEQ = #{noticeSeq}
@@ -95,6 +92,13 @@
     DELETE FROM NOTICE_REPLY
     WHERE REPLY_SEQ = #{replySeq}
   </delete>
+
+	<select id="selectRepliesByNotice" parameterType="int" resultType="com.sist.manager.model.NoticeReply">
+	    SELECT REPLY_SEQ, NOTICE_SEQ, USER_ID, REPLY_CONTENT, REG_DT
+	    FROM NOTICE_REPLY
+	    WHERE NOTICE_SEQ = #{noticeSeq}
+	    ORDER BY REPLY_SEQ ASC
+	</select>
 
 </mapper>
 

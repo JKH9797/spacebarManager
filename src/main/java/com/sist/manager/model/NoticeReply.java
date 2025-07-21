@@ -1,6 +1,7 @@
 package com.sist.manager.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class NoticeReply {
     private int replySeq;
@@ -8,6 +9,7 @@ public class NoticeReply {
     private String userId;
     private String replyContent;
     private Date regDt;
+    private List<NoticeReply> replies;
     
     // Getters and Setters
 	public int getReplySeq() {
@@ -39,6 +41,12 @@ public class NoticeReply {
 	}
 	public void setRegDt(Date regDt) {
 		this.regDt = regDt;
+	}
+	public List<NoticeReply> getReplies() {
+		return replies;
+	}
+	public void setReplies(List<NoticeReply> replies) {
+		this.replies = replies;
 	}
     
 }
