@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sist.manager.dao.QnaDao">
+  
+  <resultMap type="com.sist.manager.model.Qna" id="qnaResultMap">
+  	<id column="QNA_SEQ" property="qnaSeq" />
+  	<result column="QNA_TITLE" property="qnaTitle" />
+  	<result column="QNA_CONTENT" property="qnaContent" />
+  	<result column="USER_ID" property="userId" />
+  	<result column="QNA_STAT" property="qnaStat" />
+  	<result column="REG_DT" property="regDt" />
+  	<result column="UPDATE_DT" property="updateDt" />
+  	<result column="QNA_CMT_STAT" property="qnaCmtStat" />
+  </resultMap>
+
+  <!-- Q&A리스트 -->
+  <select id="qnaList" parameterType="com.sist.manager.model.Qna" resultMap="qnaResultMap">
+		SELECT QNA_SEQ,
+		       QNA_TITLE,
+		       QNA_CONTENT,
+		       USER_ID,
+		       QNA_STAT,
+		       REG_DT,
+		       UPDATE_DT
+		  FROM(SELECT ROWNUM RNUM,
+		              QNA_SEQ,
+		              QNA_TITLE,
+		              QNA_CONTENT,
+		              USER_ID,
+		              QNA_STAT,
+		              REG_DT,
+		              UPDATE_DT
+		        FROM(SELECT QNA_SEQ,
+		                    NVL(QNA_TITLE,'') QNA_TITLE,
+		                    NVL(QNA_CONTENT,'') QNA_CONTENT,
+		                    USER_ID,
+		                    NVL(QNA_STAT,'Y') QNA_STAT,
+		                    NVL(TO_CHAR(REG_DT,'YYYY.MM.DD HH24:MI:SS'),'') REG_DT,
+		                    NVL(TO_CHAR(UPDATE_DT,'YYYY.MM.DD HH24:MI:SS'),'') UPDATE_DT
+		               FROM QNA 
+		              WHERE 1=1
+		              <if test='qnaStat != null and qnaStat != ""'>    
+		                AND QNA_STAT = #{qnaStat}
+		              </if>
+		              <if test='searchValue  != null and searchValue  !=""'>
+		                AND (USER_ID LIKE '%' || #{searchValue } || '%'
+		                 OR QNA_TITLE LIKE '%' || #{searchValue} || '%'
+		                 OR QNA_CONTENT LIKE '%' || #{searchValue} || '%')
+		              </if>  
+		              ORDER BY REG_DT DESC))
+	    WHERE RNUM <![CDATA[>=]]> #{startRow}
+	      AND RNUM <![CDATA[<=]]> #{endRow}
+  </select>
+  
+  <!-- QNA 총 갯수 -->
+  <select id="qnaListCount" parameterType="com.sist.manager.model.Qna" resultType="int">
+  	SELECT COUNT(QNA_SEQ) CNT
+	  FROM QNA
+	  WHERE 1=1
+	  <if test='searchValue  != null and searchValue  !=""'>
+	    AND (USER_ID LIKE '%' || #{searchValue } || '%'
+	     OR QNA_TITLE LIKE '%' || #{searchValue} || '%'
+	     OR QNA_CONTENT LIKE '%' || #{searchValue} || '%')
+	  </if>
+  </select>
+  
+  <!-- QNA 상세페이지 -->
+  <select id="qnaDetail" parameterType="int" resultMap="qnaResultMap">
+  	SELECT QNA_SEQ,
+	       QNA_TITLE,
+	       QNA_CONTENT,
+	       USER_ID,
+	       QNA_STAT,
+	       REG_DT,
+	       UPDATE_DT
+	  FROM QNA
+	 WHERE QNA_SEQ = #{qnaSeq}
+  </select>
+
+  
+</mapper>
