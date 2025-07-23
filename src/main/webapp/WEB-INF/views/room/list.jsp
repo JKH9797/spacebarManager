@@ -97,19 +97,19 @@
       <h2 style="margin-right:auto; color:#525252;">숙소 리스트</h2>
       <form class="d-flex" name="searchForm" method="get" style="place-content:flex-end;">
       	
-         <select id="delYn" name="delYn" style="font-size: 1rem; width: 3rem; height: 3rem; margin-left:.5rem;">
+         <select id="delYn" name="delYn" style="font-size: 1rem; width: 5rem; height: 3rem; margin-left:.5rem;">
             <option value="">삭제여부</option>
             <option value="Y" <c:if test="${delYn == 'Y'}">selected</c:if>>삭제됨</option>
             <option value="N" <c:if test="${delYn == 'N'}">selected</c:if>>정상</option>
          </select>
          
-         <select id="saleYn" name="saleYn" style="font-size: 1rem; width: 3rem; height: 3rem; margin-left:.5rem;">
+         <select id="saleYn" name="saleYn" style="font-size: 1rem; width: 5rem; height: 3rem; margin-left:.5rem;">
             <option value="">판매상태</option>
             <option value="Y" <c:if test="${saleYn == 'Y'}">selected</c:if>>판매중</option>
             <option value="N" <c:if test="${saleYn == 'N'}">selected</c:if>>판매중지</option>
          </select>
       
-        <select name="searchType" style="font-size:1rem; width:6rem; height:3rem;">
+        <select name="searchType" style="font-size:1rem; width:5rem; height:3rem;">
           <option value="">검색타입</option>
           <option value="1"  <c:if test="${searchType=='1'}">selected</c:if>>제목</option>
           <option value="2"  <c:if test="${searchType=='2'}">selected</c:if>>호스트아이디</option>
@@ -122,7 +122,7 @@
                placeholder="검색어"/>
         <a class="btn" href="javascript:void(0)" 
            onclick="fn_search()" 
-           style="width:3rem; margin-left:.5rem;
+           style="width:4rem; margin-left:.5rem;
                   background:#efefef; border:1px solid #767676;">
           조회
         </a>
