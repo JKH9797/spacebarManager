@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp" %>
 <%
    // GNB 번호 (사용자관리)
-   request.setAttribute("_gnbNo", 1);
+   request.setAttribute("_gnbNo", 4);
 %>
 <!DOCTYPE html>
 <html>
