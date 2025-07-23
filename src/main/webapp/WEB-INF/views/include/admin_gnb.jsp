@@ -65,6 +65,18 @@
             </c:if>
           </a>
         </li>
+        <!-- 4번 메뉴 -->
+        <li class="nav-item">
+          <a 
+            class="nav-link ${_gnbNo == 4 ? 'active' : ''}" 
+            href="/qna/list"
+            aria-current="${_gnbNo == 4 ? 'page' : ''}">
+            Q&A
+            <c:if test="${_gnbNo == 4}">
+              <span class="visually-hidden">(current)</span>
+            </c:if>
+          </a>
+        </li>
       </ul>
 
       <!-- 우측 사용자명 + 로그아웃 -->

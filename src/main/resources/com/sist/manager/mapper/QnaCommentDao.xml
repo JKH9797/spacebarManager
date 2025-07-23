@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sist.manager.dao.QnaCommentDao">
+    	
+  <resultMap type="com.sist.manager.model.QnaComment" id="qnaCmtResultMap">
+  	<id column="QNA_CMT_SEQ" property="qnaCmtSeq" />
+  	<result column="QNA_SEQ" property="qnaSeq" />
+  	<result column="ADMIN_ID" property="adminId" />
+  	<result column="QNA_CMT_CONTENT" property="qnaCmtContent" />
+  	<result column="QNA_CMT_STAT" property="qnaCmtStat" />
+  	<result column="CREATE_DT" property="createDt" />
+  	<result column="UPDATE_DT" property="updateDt" />
+  </resultMap>
+  
+    <!-- QNA 답글 조회 -->
+  <select id="qnaCmtSelect" parameterType="int" resultMap="qnaCmtResultMap">
+  	SELECT QNA_CMT_SEQ,
+	       QNA_SEQ,
+	       ADMIN_ID,
+	       NVL(QNA_CMT_CONTENT,'') QNA_CMT_CONTENT,
+	       NVL(QNA_CMT_STAT,'') QNA_CMT_STAT,
+	       NVL(TO_CHAR(CREATE_DT,'YYYY.MM.DD HH24:MI:SS'),'') CREATE_DT,
+	       NVL(TO_CHAR(UPDATE_DT,'YYYY.MM.DD HH24:MI:SS'),'') UPDATE_DT
+	  FROM QNA_COMMENT
+	 WHERE QNA_SEQ = #{qnaSeq}
+  </select>
+  
+  <!-- QNA 답글 등록 -->
+  <insert id="qnaCmtInsert" parameterType="com.sist.manager.model.QnaComment">
+  	INSERT INTO QNA_COMMENT (
+    QNA_CMT_SEQ,
+    QNA_SEQ,
+    ADMIN_ID,
+    QNA_CMT_CONTENT,
+    QNA_CMT_STAT,
+    CREATE_DT,
+    UPDATE_DT
+) VALUES ( SEQ_QNA_COMMENT_SEQ.nextval,
+           #{qnaSeq},
+           #{adminId},
+           #{qnaCmtContent},
+           #{qnaCmtStat},
+           SYSDATE,
+           null)
+  </insert>
+  
+  <!-- QNA 답글 수정 -->
+  <update id="qnaCmtUpdate" parameterType="com.sist.manager.model.QnaComment">
+  	UPDATE QNA_COMMENT
+	   SET QNA_CMT_CONTENT = #{qnaCmtContent},
+	       UPDATE_DT = SYSDATE
+	 WHERE QNA_SEQ = #{qnaSeq}
+  </update>
+  
+  <update id="qnaCmtDelete" parameterType="com.sist.manager.model.QnaComment">
+  	UPDATE QNA_COMMENT
+	   SET QNA_CMT_STAT = 'N'
+	 WHERE QNA_SEQ = #{value}
+  </update>
+  
+</mapper>
