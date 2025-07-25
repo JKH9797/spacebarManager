@@ -109,7 +109,7 @@
             <option value="N" <c:if test="${saleYn == 'N'}">selected</c:if>>판매중지</option>
          </select>
       
-        <select name="searchType" style="font-size:1rem; width:5rem; height:3rem;">
+        <select name="searchType" style="font-size:1rem; width:5rem; height:3rem; margin-left:.5rem;">
           <option value="">검색타입</option>
           <option value="1"  <c:if test="${searchType=='1'}">selected</c:if>>제목</option>
           <option value="2"  <c:if test="${searchType=='2'}">selected</c:if>>호스트아이디</option>

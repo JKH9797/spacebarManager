@@ -38,6 +38,12 @@ public class IndexController {
 	/**
 	 * 인덱스 접근 시 세션 체크
 	 */
+	
+	@RequestMapping(value="/", method=RequestMethod.GET)
+	public String rootRedirect() {
+	    return "redirect:/index";
+	}
+	
 	@RequestMapping(value="/index")
 	public String index(Model model, HttpServletRequest request, HttpServletResponse response)
 	{
