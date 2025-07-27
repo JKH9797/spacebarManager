@@ -1,6 +1,7 @@
 package com.sist.manager.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -23,5 +24,12 @@ public interface UserDao {
 	
 	// 승인
 	public int userApprove(String userId);
+	
+    // [수정] 대시보드 판매자 검색 (페이징 추가)
+    List<User> findSellersByQuery(Map<String, Object> params);
+
+    // [추가] 대시보드 판매자 검색 결과 총 개수
+    int countSellersByQuery(Map<String, Object> params);
 	   
 }
+

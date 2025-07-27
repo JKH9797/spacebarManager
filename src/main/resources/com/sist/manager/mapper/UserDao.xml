@@ -149,5 +149,51 @@
 	     SET approv_stat = 'Y'
 	   WHERE user_id     = #{value}
 	</update>
-  
+  	
+  	
+	<select id="findSellersByQuery" parameterType="map" resultMap="userResultMap">
+	    SELECT
+	        USER_ID,
+	        USER_NAME
+	    FROM (
+	        SELECT
+	            ROWNUM AS RNUM,
+	            USER_ID,
+	            USER_NAME
+	        FROM (
+	            SELECT
+	                USER_ID,
+	                USER_NAME
+	            FROM
+	                SB_USER
+	            WHERE
+	                USER_TYPE = 'H'
+	            <if test="query != null and query != ''">
+	                AND (
+	                    USER_ID LIKE '%' || #{query} || '%' OR
+	                    USER_NAME LIKE '%' || #{query} || '%'
+	                )
+	            </if>
+	            ORDER BY USER_NAME ASC
+	        )
+	    )
+	    WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<select id="countSellersByQuery" parameterType="map" resultType="int">
+	    SELECT
+	        COUNT(*)
+	    FROM
+	        SB_USER
+	    WHERE
+	        USER_TYPE = 'H'
+	    <if test="query != null and query != ''">
+	        AND (
+	            USER_ID LIKE '%' || #{query} || '%' OR
+	            USER_NAME LIKE '%' || #{query} || '%'
+	        )
+	    </if>
+	</select>
+	
+	
 </mapper>

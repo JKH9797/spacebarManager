@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sist.manager.dao.DashboardDao">
+
+    <!-- =================== resultMap =================== -->
+    <resultMap id="sellerRankingResultMap" type="com.sist.manager.model.SellerRanking">
+        <result column="rank" property="rank"/>
+        <result column="hostId" property="hostId"/>
+        <result column="hostName" property="hostName"/>
+        <result column="hostNickname" property="hostNickname"/>
+        <result column="totalAmount" property="totalAmount"/>
+        <result column="totalCount" property="totalCount"/>
+        <result column="averageRating" property="averageRating"/>
+        <result column="reviewCount" property="reviewCount"/>
+    </resultMap>
+
+    <!-- =================== 1. 전체 매출 통계 (group by 단위: week/month) =================== -->
+    <select id="selectTotalSalesStatsByGroup" parameterType="map" resultType="map">
+        SELECT
+            <choose>
+                <when test="groupBy == 'week'">
+                    TO_CHAR(RS.REG_DT, 'YYYY') || '년 ' || TO_CHAR(RS.REG_DT, 'IW') || '주차' AS "label",
+                </when>
+                <when test="groupBy == 'month'">
+                    TO_CHAR(RS.REG_DT, 'YYYY-MM') AS "label",
+                </when>
+            </choose>
+            SUM(NVL(RS.FINAL_AMT, 0)) AS "salesAmount",
+            COUNT(RS.RSV_SEQ) AS "salesCount"
+        FROM RESERVATION RS
+        JOIN ROOM_TYPE RT ON RS.ROOM_TYPE_SEQ = RT.ROOM_TYPE_SEQ
+        JOIN ROOM RM ON RT.ROOM_SEQ = RM.ROOM_SEQ
+        WHERE RS.RSV_PAYMENT_STAT = 'PAID'
+          AND RS.RSV_STAT = 'CONFIRMED'
+          AND RS.REG_DT BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
+                            AND TO_DATE(#{endDate}, 'YYYY-MM-DD') + 0.99999
+        GROUP BY
+            <choose>
+                <when test="groupBy == 'week'">
+                    TO_CHAR(RS.REG_DT, 'YYYY'), TO_CHAR(RS.REG_DT, 'IW')
+                </when>
+                <when test="groupBy == 'month'">
+                    TO_CHAR(RS.REG_DT, 'YYYY-MM')
+                </when>
+            </choose>
+        ORDER BY 1
+    </select>
+
+    <!-- =================== 2. 판매자별 매출 통계 (hostId별) =================== -->
+	<select id="selectSellerSalesStatsByGroup" parameterType="map" resultType="map">
+	    SELECT
+	        <choose>
+	            <when test="groupBy == 'week'"> TO_CHAR(RS.REG_DT, 'YYYY') || '년 ' || TO_CHAR(RS.REG_DT, 'IW') || '주차' AS "label", </when>
+	            <when test="groupBy == 'month'"> TO_CHAR(RS.REG_DT, 'YYYY-MM') AS "label", </when>
+	        </choose>
+	        SUM(NVL(RS.FINAL_AMT, 0)) AS "salesAmount",
+	        COUNT(RS.RSV_SEQ) AS "salesCount",
+	        ROUND(AVG(NVL(RV.RATING, 0)), 1) AS "avgRating",
+	        COUNT(RV.REVIEW_SEQ) AS "reviewCount"
+	    FROM RESERVATION RS
+	    JOIN ROOM_TYPE RT ON RS.ROOM_TYPE_SEQ = RT.ROOM_TYPE_SEQ
+	    JOIN ROOM RM ON RT.ROOM_SEQ = RM.ROOM_SEQ
+	    LEFT JOIN REVIEW RV ON RS.RSV_SEQ = RV.RSV_SEQ AND RV.REVIEW_STAT = 'Y' -- ◀◀◀ 이 JOIN 구문이 누락되었습니다.
+	    WHERE RM.HOST_ID = #{hostId}
+	      AND RS.RSV_PAYMENT_STAT = 'PAID' -- 컬럼명이 RSV_PAYMENT_STAT가 맞는지 확인하세요.
+	      AND RS.RSV_STAT = 'CONFIRMED'
+	      AND RS.REG_DT BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
+	                        AND TO_DATE(#{endDate}, 'YYYY-MM-DD') + 0.99999
+	    GROUP BY
+	        <choose>
+	            <when test="groupBy == 'week'"> TO_CHAR(RS.REG_DT, 'YYYY'), TO_CHAR(RS.REG_DT, 'IW') </when>
+	            <when test="groupBy == 'month'"> TO_CHAR(RS.REG_DT, 'YYYY-MM') </when>
+	        </choose>
+	    ORDER BY 1
+	</select>
+
+    <!-- =================== 3. 판매자 매출 순위 =================== -->
+<select id="selectSellerSalesRanking" parameterType="map" resultMap="sellerRankingResultMap">
+        WITH SALES_DATA AS (
+            -- 기간 내 매출/판매 건수 집계
+            SELECT
+                RM.HOST_ID,
+                SUM(NVL(RS.FINAL_AMT, 0)) AS totalAmount,
+                COUNT(RS.RSV_SEQ) AS totalCount
+            FROM RESERVATION RS
+            JOIN ROOM_TYPE RT ON RS.ROOM_TYPE_SEQ = RT.ROOM_TYPE_SEQ
+            JOIN ROOM RM ON RT.ROOM_SEQ = RM.ROOM_SEQ
+            WHERE RS.RSV_PAYMENT_STAT = 'PAID'
+              AND RS.RSV_STAT = 'CONFIRMED'
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+              AND RS.REG_DT BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
+                                AND TO_DATE(#{endDate}, 'YYYY-MM-DD') + 0.99999
+            </if>
+            GROUP BY RM.HOST_ID
+        ),
+        SELLER_STATS AS (
+            -- 판매자 전체 누적 평점/리뷰 수 집계
+            SELECT
+                RM.HOST_ID,
+                SUM(NVL(RM.REVIEW_COUNT, 0)) AS reviewCount,
+                CASE 
+                    WHEN SUM(NVL(RM.REVIEW_COUNT, 0)) = 0 THEN 0
+                    ELSE ROUND(SUM(NVL(RM.AVERAGE_RATING, 0) * NVL(RM.REVIEW_COUNT, 0)) / SUM(NVL(RM.REVIEW_COUNT, 0)), 1)
+                END AS averageRating
+            FROM ROOM RM
+            GROUP BY RM.HOST_ID
+        )
+        SELECT * FROM (
+            SELECT ROWNUM AS RNUM, a.* FROM (
+                SELECT
+                    RANK() OVER (ORDER BY 
+                        <choose>
+                            <when test="orderBy == 'count'"> s.totalCount DESC </when>
+                            <when test="orderBy == 'rating'"> r.averageRating DESC, r.reviewCount DESC </when>
+                            <otherwise> s.totalAmount DESC </otherwise>
+                        </choose>
+                    ) AS rank,
+                    s.HOST_ID AS hostId,
+                    u.USER_NAME AS hostName,
+                    u.NICKNAME AS hostNickname,
+                    s.totalAmount,
+                    s.totalCount,
+                    NVL(r.averageRating, 0) AS averageRating,
+                    NVL(r.reviewCount, 0) AS reviewCount
+                FROM SALES_DATA s
+                JOIN SB_USER u ON s.HOST_ID = u.USER_ID
+                LEFT JOIN SELLER_STATS r ON s.HOST_ID = r.HOST_ID
+                ORDER BY rank
+            ) a
+        )
+        WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+    </select>
+    
+<select id="countSellerSalesRanking" parameterType="map" resultType="int">
+    SELECT
+        COUNT(s.HOST_ID)
+    FROM
+        (
+            -- 기간 내 매출이 있는 판매자
+            SELECT
+                RM.HOST_ID
+            FROM RESERVATION RS
+            JOIN ROOM_TYPE RT ON RS.ROOM_TYPE_SEQ = RT.ROOM_TYPE_SEQ
+            JOIN ROOM RM ON RT.ROOM_SEQ = RM.ROOM_SEQ
+            WHERE RS.RSV_PAYMENT_STAT = 'PAID'
+              AND RS.RSV_STAT = 'CONFIRMED'
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+              AND RS.REG_DT BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
+                                AND TO_DATE(#{endDate}, 'YYYY-MM-DD') + 0.99999
+            </if>
+            GROUP BY RM.HOST_ID
+        ) s
+    JOIN
+        (
+            -- 등록된 숙소가 있는 판매자
+            SELECT
+                HOST_ID
+            FROM ROOM
+            GROUP BY HOST_ID
+        ) r ON s.HOST_ID = r.HOST_ID
+</select>
+
+</mapper>

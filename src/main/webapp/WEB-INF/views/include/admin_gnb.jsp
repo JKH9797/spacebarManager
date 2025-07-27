@@ -23,6 +23,27 @@
 	    padding-right: 1.5rem;
 	    padding-left: 1.5rem;
 	}
+	/* 드롭다운 메뉴 스타일 */
+	.navbar-nav .dropdown-menu {
+	    position: absolute;
+	    background-color: #f8f9fa;
+	    border: 1px solid rgba(0,0,0,.15);
+	    border-radius: .25rem;
+	    box-shadow: 0 .5rem 1rem rgba(0,0,0,.175);
+	    margin-top: 0;
+	    padding: 0.5rem 0; /* ◀◀ 수정: 좌우 패딩 제거 */
+	}
+	.navbar-nav .dropdown-item {
+	    display: block; /* ◀◀ 추가: 블록 요소로 변경 */
+	    width: 100%;    /* ◀◀ 추가: 너비를 100%로 설정 */
+	    box-sizing: border-box; /* ◀◀ 추가: 패딩이 너비에 영향을 주지 않도록 함 */
+	    color: #212529;
+	    padding: .5rem 1.5rem; /* 좌우 패딩을 늘려 글자 여유 공간 확보 */
+	}
+	.navbar-nav .dropdown-item:hover {
+	    background-color: #e9ecef;
+	    color: #1e2125;
+	}
 </style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
 
@@ -77,6 +98,18 @@
             </c:if>
           </a>
         </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle ${_gnbNo == 5 ? 'active' : ''}" 
+             href="#" id="dashboardDropdown" role="button" 
+             data-bs-toggle="dropdown" aria-expanded="false">
+            대시보드
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="dashboardDropdown">
+            <li><a class="dropdown-item" href="/dashboard/main#total-sales">전체 매출 통계</a></li>
+            <li><a class="dropdown-item" href="/dashboard/main#seller-sales">판매자별 매출 통계</a></li>
+            <li><a class="dropdown-item" href="/dashboard/main#seller-ranking">판매자 매출 순위</a></li>
+          </ul>
+        </li>
       </ul>
 
       <!-- 우측 사용자명 + 로그아웃 -->
@@ -87,3 +120,5 @@
     </div>
   </div>
 </nav>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
